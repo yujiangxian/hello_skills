@@ -20,6 +20,30 @@ jobs:
         with:
           python-version: "3.12"
 
+      # 这个渲染器只允许用标准库。引入 urllib / subprocess / socket / requests
+      # 之类的 PR 会在这里失败，防止被改成会联网或执行命令的脚本。
+      - name: Audit renderer imports
+        run: |
+          python - <<'PY'
+          import ast
+          import sys
+
+          allowed = {"argparse", "datetime", "html", "json", "os", "re", "sys", "pathlib"}
+          src = open("render.py", encoding="utf-8").read()
+          tree = ast.parse(src)
+          found = set()
+          for node in ast.walk(tree):
+              if isinstance(node, ast.Import):
+                  for alias in node.names:
+                      found.add(alias.name.split(".")[0])
+              elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+                  found.add(node.module.split(".")[0])
+          print("imports:", sorted(found))
+          bad = sorted(found - allowed)
+          if bad:
+              sys.exit("unexpected imports (renderer must stay stdlib-only): " + ", ".join(bad))
+          PY
+
       - name: Compile renderer
         run: python -m py_compile render.py
 
