@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# PR 来自 fork 时，CI 只拿只读 token；即使代码被合并也改不了仓库。
+permissions:
+  contents: read
+
 jobs:
   render:
     runs-on: ubuntu-latest
