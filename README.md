@@ -27,9 +27,9 @@
 ```
 产品
 ├── 使用者（角色 / 是谁 / 要做成的事）
-├── 核心功能（F1、F2…）      每个节点写：效果 / 数据源 / 核心实现 / 界面 / 入口 / 依赖 / 状态
+├── 核心功能（F1、F2…）      每个节点写：效果 / 数据源 / 核心实现 / 界面 / 入口 / 验收 / 依赖 / 状态
 ├── 扩展功能                 依赖核心，去掉后核心照常工作
-├── 界面与交互               页面 / 页面布局 / 任务流程 / 交互模式 / 用词 / 视觉与组件
+├── 界面与交互               页面 / 页面布局 / 导航 / 页面规格 / 接口契约 / 任务流程 / 交互模式 / 用词 / 枚举 / 视觉与组件
 ├── 待合并                   发现了两套做法，还没合
 └── 已并入与已删除
 ```
@@ -52,6 +52,7 @@
 
 ```bash
 python render.py docs/product-tree.md --check                        # 检查编号引用
+python audit.py docs/product-tree.md                                 # 检查能不能照树把界面做完整
 python render.py docs/product-tree.md -o .preview/product-tree.html  # 生成图
 ```
 
@@ -65,9 +66,12 @@ touch docs/product-tree.md
 # 2. 照着 template.md 写第一版
 
 # 3. 检查 + 看图
-python <本仓库>/render.py docs/product-tree.md --check
+python <本仓库>/render.py docs/product-tree.md --check   # 编号、依赖、引用
+python <本仓库>/audit.py docs/product-tree.md            # 验收、四态、闭环、数据可见性
 python <本仓库>/render.py docs/product-tree.md -o .preview/product-tree.html
 ```
+
+`--check` 保证引用不断；`audit.py` 保证照这棵树能把界面做完整。两个都过再写代码。
 
 已有项目不必一次盘完：先把本次需求涉及的那一枝盘清，其余功能先只写名字、状态标「未盘点」。
 
@@ -93,6 +97,7 @@ python <本仓库>/render.py docs/product-tree.md -o .preview/product-tree.html
 | `bootstrap.md` | 已有项目怎么盘点出第一版树 |
 | `examples.md` | 判定与合并的具体例子 |
 | `render.py` | 生成图、检查编号（只用 Python 3 标准库） |
+| `audit.py` | 检查可交付性：验收、页面四态、接口契约、导航闭环、数据可见性、枚举映射 |
 | `viewer.html` | 图模板 |
 
 ## 设计原则
