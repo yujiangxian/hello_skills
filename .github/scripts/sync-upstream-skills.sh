@@ -61,6 +61,9 @@ mkdir -p plugins/wecomcli/skills
 cp -R "$TMP/wecom/skills/." plugins/wecomcli/skills/
 cp "$TMP/wecom/LICENSE" plugins/wecomcli/LICENSE
 
+# 上游可能带可执行位，统一成普通文件，避免每次同步只产生 mode 变更。
+find plugins/dingtalk/skills plugins/wecomcli/skills -type f -exec chmod 644 {} +
+
 echo "==> Updating plugin versions"
 DINGTALK_VERSION="$DINGTALK_VERSION" WECOM_VERSION="$WECOM_VERSION" node <<'JS'
 const fs = require('fs');
