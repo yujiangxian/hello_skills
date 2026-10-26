@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 concurrency:
   group: sync-upstream-skills
@@ -55,3 +56,7 @@ jobs:
 
           Plugin versions follow the upstream package versions. Review the diff before merging."
           fi
+
+          # GITHUB_TOKEN 推送的分支不会自动触发 PR 检查；显式调度 check.yml，
+          # 否则 PR 会一直卡在必需的 render 检查上。
+          gh workflow run check.yml --ref "$BRANCH"
