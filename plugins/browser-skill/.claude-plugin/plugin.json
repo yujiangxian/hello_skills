@@ -1,0 +1,14 @@
+{
+  "name": "browser-skill",
+  "version": "1.0.0",
+  "description": "用 bsk CLI 操作用户已登录的 Chromium 浏览器：读页面、填表单、抓数据、测 UI。",
+  "author": {
+    "name": "yujiangxian"
+  },
+  "keywords": [
+    "browser",
+    "automation",
+    "testing",
+    "scraping"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "product-tree",
+  "version": "1.0.0",
+  "description": "用一棵树管住整个产品的设计，防止同一件事在代码里被做几套。",
+  "author": {
+    "name": "yujiangxian"
+  },
+  "homepage": "https://github.com/yujiangxian/product-tree",
+  "repository": "https://github.com/yujiangxian/product-tree",
+  "license": "MIT",
+  "keywords": [
+    "product-design",
+    "feature-tree",
+    "architecture",
+    "planning"
+  ]
+}
