@@ -1,6 +1,6 @@
 # wecomcli
 
-企业微信 CLI 技能集合，共 14 个技能。安装后以 `wecomcli:<技能名>` 调用。
+企业微信 CLI 技能集合，共 15 个技能。安装后以 `wecomcli:<技能名>` 调用。
 
 ## 前置条件
 
@@ -19,12 +19,15 @@
 | `wecomcli-media` | 媒体文件按 media_id 上传与下载 |
 | `wecomcli-meeting` | 在线会议创建、查询、纪要、转写与取消 |
 | `wecomcli-message` | 查询可发送会话并发送文本、Markdown、图片、文件等 |
+| `wecomcli-pptx` | 生成、编辑在线 PPT，导入本地 .pptx |
 | `wecomcli-shared` | 公共前置检查、机器人身份与输出约束 |
 | `wecomcli-sheet` | 在线表格新建、导入、读取、修改与追加行 |
 | `wecomcli-smartpage` | 智能文档创建、读取与页面树调整 |
 | `wecomcli-smartsheet` | 智能表格结构与记录、字段、视图、图表管理 |
 | `wecomcli-todo` | 待办创建、删除、完成、查询与修改 |
 
-## 来源
+## 来源与许可
 
-从本机 `~/.agents/skills/wecomcli-*` 收录的快照，由企业微信 CLI 分发。上游更新时以官方分发为准；本仓库不附带独立许可证，版权归企业微信平台。
+技能取自公开仓库 [WecomTeam/wecom-cli](https://github.com/WecomTeam/wecom-cli) 的 `skills/` 目录。版权归 WeCom，按 MIT 许可分发，见 [LICENSE](LICENSE)。
+
+仓库每周自动检查上游仓库，有更新时创建 PR。

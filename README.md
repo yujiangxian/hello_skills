@@ -9,8 +9,8 @@ yujiangxian 常用的 Claude Code 技能合集。按插件组织，每个技能�
 | [product-tree](plugins/product-tree/) | `product-tree` | 用一棵树管住整个产品设计，防止同一件事在代码里被做几套 |
 | [browser-skill](plugins/browser-skill/) | `browser-skill` | 操作用户已登录的 Chromium 浏览器：读页面、填表单、抓数据、测 UI |
 | [taste-skill](plugins/taste-skill/) | `design-taste-frontend` | 前端设计品味：从研究过的方向库取方向，在真实浏览器里检查并迭代页面 |
-| [dingtalk](plugins/dingtalk/) | `dingtalk:*`（14 个） | 钉钉 DWS 技能集合：消息、文档、日历、待办、审批、通讯录、AI 表格等 |
-| [wecomcli](plugins/wecomcli/) | `wecomcli:*`（14 个） | 企业微信 CLI 技能集合：消息、文档、日程、会议、邮件、待办、微盘等 |
+| [dingtalk](plugins/dingtalk/) | `dingtalk:*`（16 个） | 钉钉 DWS 技能集合：消息、文档、日历、待办、审批、通讯录、AI 表格等 |
+| [wecomcli](plugins/wecomcli/) | `wecomcli:*`（15 个） | 企业微信 CLI 技能集合：消息、文档、日程、会议、邮件、待办、微盘等 |
 
 ## 安装
 
@@ -84,6 +84,19 @@ yujiangxian 常用的 Claude Code 技能合集。按插件组织，每个技能�
 cp -r plugins/product-tree/skills/product-tree ~/.claude/skills/
 ```
 
+## 上游同步
+
+`dingtalk` 与 `wecomcli` 是上游分发的快照，由 [sync-upstream-skills](.github/workflows/sync-upstream-skills.yml) 每周一检查一次：
+
+- `dingtalk`：npm 包 `dingtalk-workspace-cli` 内的技能目录
+- `wecomcli`：`WecomTeam/wecom-cli` 仓库的 `skills/`
+
+有变化时，workflow 会更新 `plugins/` 和插件版本号，并在 `chore/sync-upstream-skills` 分支上创建 PR，合并前先看 diff。也可以本地手动运行：
+
+```bash
+bash .github/scripts/sync-upstream-skills.sh
+```
+
 ## 添加新技能
 
 1. 新建 `plugins/<插件名>/skills/<技能名>/SKILL.md`，其中 `name` 与目录名一致；
@@ -97,4 +110,5 @@ cp -r plugins/product-tree/skills/product-tree ~/.claude/skills/
 
 - 本仓库与 `product-tree`、`browser-skill`：MIT，见 [LICENSE](LICENSE)
 - `taste-skill`：MIT，版权归 [Leonxlnx](https://github.com/Leonxlnx)，见 [plugins/taste-skill/LICENSE](plugins/taste-skill/LICENSE)
-- `dingtalk`、`wecomcli`：收录自本机 CLI 分发目录的快照，未附独立许可证，版权归对应平台；上游更新以官方分发为准。
+- `dingtalk`：Apache-2.0，版权归 Alibaba Group，见 [plugins/dingtalk/LICENSE](plugins/dingtalk/LICENSE) 与 [NOTICE](plugins/dingtalk/NOTICE)
+- `wecomcli`：MIT，版权归 WeCom，见 [plugins/wecomcli/LICENSE](plugins/wecomcli/LICENSE)
