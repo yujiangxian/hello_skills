@@ -1,0 +1,62 @@
+name: sync-upstream-skills
+
+on:
+  schedule:
+    # 每周一 02:23 UTC（北京时间 10:23）
+    - cron: "23 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: sync-upstream-skills
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Sync from upstream
+        run: bash .github/scripts/sync-upstream-skills.sh
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BRANCH=chore/sync-upstream-skills
+          git checkout -B "$BRANCH"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Upstream skills are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync upstream skills"
+          git push --force origin "$BRANCH"
+          if gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number' | grep -q .; then
+            echo "Pull request already open."
+          else
+            gh pr create --base main --head "$BRANCH" \
+              --title "chore: sync upstream skills" \
+              --body "Automated sync from the upstream distributors.
+
+          - DingTalk skills: npm package \`dingtalk-workspace-cli\` (\`share/skills/multi\`)
+          - WeCom skills: \`WecomTeam/wecom-cli\` (\`skills/\`)
+
+          Plugin versions follow the upstream package versions. Review the diff before merging."
+          fi
+
+          # GITHUB_TOKEN 推送的分支不会自动触发 PR 检查；显式调度 check.yml，
+          # 否则 PR 会一直卡在必需的 render 检查上。
+          gh workflow run check.yml --ref "$BRANCH"
