@@ -1,0 +1,118 @@
+# 产品树 · Product Tree
+
+用一棵树管住整个产品的设计，防止同一件事在代码里被做几套。
+
+不是文档生成器，是一套**约定 + 检查工具**：AI 在写代码之前，先在树上找到落点，再决定是"加一个入口"还是"新增一个功能"。
+
+## 它解决什么问题
+
+同一类问题，换一种写法就会重来一遍：
+
+- **配置**：配置文件改一套、设置页另写一套校验，两边互相覆盖
+- **显示**：列表叫「处理中」、详情叫「进行中」，概览的条数和列表对不上
+- **页面**：两个页面回答同一个问题，只是筛选条件不同
+- **流程**：退款在订单详情和客服工单里各走一套审批
+
+产品树把这些都摊在明面上：改的是同一份数据、结果相同、规则本该一样，就是同一个节点——入口可以有很多个，实现只能有一套。
+
+## 核心思路
+
+1. **一个效果，一个节点**。判断两个功能是不是同一个，看效果不看入口
+2. **入口只做转换**。页面、接口、命令行、定时任务都只是入口，业务规则写在核心实现里
+3. **先改树，再改代码**。同一次提交
+4. **编号不复用**。删掉的编号留在「已并入与已删除」里，旧引用还能查到去向
+
+树的形状：
+
+```
+产品
+├── 使用者（角色 / 是谁 / 要做成的事）
+├── 核心功能（F1、F2…）      每个节点写：效果 / 数据源 / 核心实现 / 界面 / 入口 / 验收 / 依赖 / 状态
+├── 扩展功能                 依赖核心，去掉后核心照常工作
+├── 界面与交互               页面 / 页面布局 / 导航 / 页面规格 / 接口契约 / 任务流程 / 交互模式 / 用词 / 枚举 / 视觉与组件
+├── 待合并                   发现了两套做法，还没合
+└── 已并入与已删除
+```
+
+## 三种接入方式
+
+不绑定任何单一工具。
+
+### 1. Claude Code（自动触发）
+
+通过插件市场安装：
+
+```text
+/plugin marketplace add yujiangxian/hello_skills
+/plugin install product-tree@hello-skills
+```
+
+也可以把 `skills/product-tree/` 整个目录复制（或软链接）到 `~/.claude/skills/product-tree/`。Claude Code 会在涉及功能、页面、流程的改动时自动读取。
+
+### 2. 任意支持 AGENTS.md 的工具
+
+把 [`agents-md.md`](agents-md.md) 里那段贴进你项目的 `AGENTS.md`（或在 `CLAUDE.md` 里加一行 `@AGENTS.md`）。Cursor、Codex、Gemini CLI 等遵循该约定的工具都会读到。
+
+### 3. 人直接使用
+
+树文件是普通 Markdown，照着 [`template.md`](template.md) 写就行。生成图只需要 Python 3，不用装任何依赖：
+
+```bash
+python render.py docs/product-tree.md --check                        # 检查编号引用
+python audit.py docs/product-tree.md                                 # 检查能不能照树把界面做完整
+python render.py docs/product-tree.md -o .preview/product-tree.html  # 生成图
+```
+
+## 快速开始
+
+```bash
+# 1. 在新项目里建树（先读 bootstrap.md 的盘点步骤）
+mkdir -p docs
+touch docs/product-tree.md
+
+# 2. 照着 template.md 写第一版
+
+# 3. 检查 + 看图
+python <本仓库>/plugins/product-tree/skills/product-tree/render.py docs/product-tree.md --check   # 编号、依赖、引用
+python <本仓库>/plugins/product-tree/skills/product-tree/audit.py docs/product-tree.md            # 验收、四态、闭环、数据可见性
+python <本仓库>/plugins/product-tree/skills/product-tree/render.py docs/product-tree.md -o .preview/product-tree.html
+```
+
+`--check` 保证引用不断；`audit.py` 保证照这棵树能把界面做完整。两个都过再写代码。
+
+已有项目不必一次盘完：先把本次需求涉及的那一枝盘清，其余功能先只写名字、状态标「未盘点」。
+
+## 图是什么样的
+
+`render.py` 生成一张可交互的节点图（单文件 HTML，离线可看）：
+
+- **按分枝着色**，每枝一个颜色，结构一眼可见
+- **功能节点上直接显示核心实现**（`module::path`），架构信息不藏在文档里
+- **三层导航**：右下角小地图、左上角面包屑、顶部搜索
+- **双击节点看详情**：效果、核心实现、入口明细、子功能、依赖
+- **「只看这一枝」**：树复杂时把视野收窄到一条路径
+- **依赖线**：显示功能之间的依赖关系
+- 地址栏 `#F5` 直达某个节点
+
+## 文件说明
+
+| 文件 | 用途 |
+|---|---|
+| `SKILL.md` | Claude Code 技能入口（方法论全文） |
+| `agents-md.md` | 贴进任意项目 `AGENTS.md` 的摘要 |
+| `template.md` | 树文件格式与完整模板 |
+| `bootstrap.md` | 已有项目怎么盘点出第一版树 |
+| `examples.md` | 判定与合并的具体例子 |
+| `render.py` | 生成图、检查编号（只用 Python 3 标准库） |
+| `audit.py` | 检查可交付性：验收、页面四态、接口契约、导航闭环、数据可见性、枚举映射 |
+| `viewer.html` | 图模板 |
+
+## 设计原则
+
+这套方法的前提是：**AI 写代码很快，但"该不该写"比"怎么写"更贵**。
+
+树的存在不是为了留档，是为了在动手之前有一次停顿——这次改动到底是在加一个入口，还是在造第二套实现。
+
+## License
+
+MIT

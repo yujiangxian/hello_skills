@@ -1,0 +1,68 @@
+{
+  "name": "hello-skills",
+  "owner": {
+    "name": "yujiangxian",
+    "url": "https://github.com/yujiangxian"
+  },
+  "metadata": {
+    "description": "yujiangxian 常用的 Claude Code skills：产品树、浏览器自动化、前端设计品味",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "product-tree",
+      "source": "./plugins/product-tree",
+      "description": "用一棵树管住整个产品的设计，防止同一件事在代码里被做几套。",
+      "version": "1.0.0",
+      "author": {
+        "name": "yujiangxian"
+      },
+      "homepage": "https://github.com/yujiangxian/hello_skills",
+      "repository": "https://github.com/yujiangxian/hello_skills",
+      "license": "MIT",
+      "keywords": [
+        "product-design",
+        "feature-tree",
+        "architecture",
+        "planning"
+      ],
+      "category": "productivity"
+    },
+    {
+      "name": "browser-skill",
+      "source": "./plugins/browser-skill",
+      "description": "用 bsk CLI 操作用户已登录的 Chromium 浏览器：读页面、填表单、抓数据、测 UI。",
+      "version": "1.0.0",
+      "author": {
+        "name": "yujiangxian"
+      },
+      "keywords": [
+        "browser",
+        "automation",
+        "testing",
+        "scraping"
+      ],
+      "category": "automation"
+    },
+    {
+      "name": "taste-skill",
+      "source": "./plugins/taste-skill",
+      "description": "前端设计品味：从研究过的设计方向库中取方向，在真实浏览器里检查并迭代页面。",
+      "version": "2.1.5",
+      "author": {
+        "name": "Leonxlnx",
+        "url": "https://github.com/Leonxlnx"
+      },
+      "homepage": "https://github.com/Leonxlnx/taste-skill",
+      "repository": "https://github.com/Leonxlnx/taste-skill",
+      "license": "MIT",
+      "keywords": [
+        "frontend",
+        "design",
+        "ui",
+        "web"
+      ],
+      "category": "design"
+    }
+  ]
+}

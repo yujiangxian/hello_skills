@@ -13,6 +13,8 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
+    env:
+      SKILL_DIR: plugins/product-tree/skills/product-tree
     steps:
       - uses: actions/checkout@v4
 
@@ -26,12 +28,15 @@ jobs:
         run: |
           python - <<'PY'
           import ast
+          import os
           import sys
+          from pathlib import Path
 
           allowed = {"argparse", "datetime", "html", "json", "os", "re", "sys", "pathlib"}
+          root = Path(os.environ["SKILL_DIR"])
           for name in ("render.py", "audit.py"):
               found = set()
-              tree = ast.parse(open(name, encoding="utf-8").read())
+              tree = ast.parse((root / name).read_text(encoding="utf-8"))
               for node in ast.walk(tree):
                   if isinstance(node, ast.Import):
                       for alias in node.names:
@@ -47,16 +52,16 @@ jobs:
           PY
 
       - name: Compile scripts
-        run: python -m py_compile render.py audit.py
+        run: python -m py_compile $SKILL_DIR/render.py $SKILL_DIR/audit.py
 
       - name: Check sample tree
-        run: python render.py .github/test-tree.md --check
+        run: python $SKILL_DIR/render.py .github/test-tree.md --check
 
       - name: Audit sample tree
-        run: python audit.py .github/test-tree.md --strict
+        run: python $SKILL_DIR/audit.py .github/test-tree.md --strict
 
       - name: Render sample tree
-        run: python render.py .github/test-tree.md -o /tmp/product-tree.html
+        run: python $SKILL_DIR/render.py .github/test-tree.md -o /tmp/product-tree.html
 
       - name: Verify output
         run: |
