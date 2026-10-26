@@ -43,8 +43,8 @@
 通过插件市场安装：
 
 ```text
-/plugin marketplace add yujiangxian/product-tree
-/plugin install product-tree@yujiangxian-skills
+/plugin marketplace add yujiangxian/hello_skills
+/plugin install product-tree@hello-skills
 ```
 
 也可以把 `skills/product-tree/` 整个目录复制（或软链接）到 `~/.claude/skills/product-tree/`。Claude Code 会在涉及功能、页面、流程的改动时自动读取。

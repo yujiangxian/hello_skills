@@ -15,15 +15,15 @@ yujiangxian 常用的 Claude Code 技能合集。按插件组织，每个技能�
 在 Claude Code 中先添加市场，再按需安装：
 
 ```text
-/plugin marketplace add yujiangxian/product-tree
-/plugin install product-tree@yujiangxian-skills
+/plugin marketplace add yujiangxian/hello_skills
+/plugin install product-tree@hello-skills
 ```
 
 其余两个插件同理：
 
 ```text
-/plugin install browser-skill@yujiangxian-skills
-/plugin install taste-skill@yujiangxian-skills
+/plugin install browser-skill@hello-skills
+/plugin install taste-skill@hello-skills
 ```
 
 安装后技能以 `插件名:技能名` 调用，例如 `product-tree:product-tree`、`taste-skill:design-taste-frontend`。
@@ -31,8 +31,8 @@ yujiangxian 常用的 Claude Code 技能合集。按插件组织，每个技能�
 更新：
 
 ```text
-/plugin marketplace update yujiangxian-skills
-/plugin update product-tree@yujiangxian-skills
+/plugin marketplace update hello-skills
+/plugin update product-tree@hello-skills
 ```
 
 ## 目录结构
