@@ -68,7 +68,7 @@
       "name": "dingtalk",
       "source": "./plugins/dingtalk",
       "description": "钉钉（DWS）技能集合：消息、文档、日历、待办、审批、通讯录、AI 表格、听记等。需要 dws CLI。",
-      "version": "1.0.66",
+      "version": "1.0.67",
       "author": {
         "name": "yujiangxian"
       },
